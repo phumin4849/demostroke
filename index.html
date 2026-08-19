@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StrokeGuard AI — Soft Blue Edition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Prompt', sans-serif; 
+      background-color: #F4F8F9; /* พื้นหลังสีฟ้าเทาอ่อนมาก ไม่สะท้อนตา */
+      font-size: 18px; 
+    }
+  </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col antialiased selection:bg-[#CEEAE5]">
+
+  <!-- DEMO CONTROLLER BAR -->
+  <header class="bg-slate-900 text-slate-100 px-4 py-3 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-sm">
+      <div class="flex items-center gap-2 font-bold">
+        <span class="flex h-3 w-3 rounded-full bg-[#17BCBC] animate-ping"></span>
+        <span class="text-[#BDDAE6]">สลับโหมดนำเสนอ (Demo Switcher):</span>
+      </div>
+
+      <div class="flex items-center gap-2 bg-slate-800 p-1.5 rounded-2xl border border-slate-700">
+        <button onclick="setDemoMode('normal')" id="btn-demo-normal" class="px-4 py-1.5 rounded-xl transition-all font-bold bg-[#4E98B8] text-white shadow-sm">
+          🌊 ปกติ (Normal)
+        </button>
+        <button onclick="setDemoMode('warning')" id="btn-demo-warning" class="px-4 py-1.5 rounded-xl transition-all font-medium text-slate-300 hover:text-white">
+          🍑 เฝ้าระวัง (Warning)
+        </button>
+        <button onclick="setDemoMode('critical')" id="btn-demo-critical" class="px-4 py-1.5 rounded-xl transition-all font-medium text-slate-300 hover:text-white">
+          🚨 ฉุกเฉิน (Alert)
+        </button>
+      </div>
+
+      <div class="hidden lg:flex items-center gap-3 text-slate-300 text-sm font-medium">
+        <span>เมนูด่วน:</span>
+        <button onclick="switchTab('patient_dash')" class="hover:text-[#64C5D7] underline underline-offset-4">หน้าหลัก</button>
+        <button onclick="switchTab('ai_analysis')" class="hover:text-[#64C5D7] underline underline-offset-4">วิเคราะห์ AI</button>
+        <button onclick="switchTab('rehab')" class="hover:text-[#64C5D7] underline underline-offset-4">ฝึกกายภาพ</button>
+        <button onclick="switchTab('family_dash')" class="hover:text-[#64C5D7] underline underline-offset-4">ผู้ดูแล</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <div class="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto p-4 md:p-6 gap-6">
+    
+    <!-- DESKTOP SIDEBAR -->
+    <aside id="main-sidebar" class="hidden md:flex flex-col w-80 bg-white rounded-3xl p-6 border-2 border-[#ABCFD1]/60 shadow-lg shrink-0 justify-between">
+      <div class="space-y-6">
+        <!-- Logo -->
+        <div onclick="switchTab('welcome')" class="flex items-center gap-3.5 cursor-pointer px-1">
+          <div class="w-14 h-14 rounded-2xl bg-[#4E98B8] flex items-center justify-center text-white shadow-md shadow-[#84BAC9]/30">
+            <i data-lucide="heart-pulse" class="w-8 h-8"></i>
+          </div>
+          <div>
+            <h1 class="font-extrabold text-2xl text-slate-900 leading-tight">StrokeGuard</h1>
+            <span class="text-xs bg-[#CEEAE5] text-[#174355] px-2.5 py-0.5 rounded-full font-bold">AI Care Assistant</span>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <nav class="space-y-2">
+          <button onclick="switchTab('patient_dash')" id="nav-patient_dash" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-lg font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent hover:border-[#ABCFD1]">
+            <i data-lucide="home" class="w-6 h-6 text-[#4E98B8]"></i> หน้าหลักผู้ป่วย
+          </button>
+          <button onclick="switchTab('ai_analysis')" id="nav-ai_analysis" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-lg font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent hover:border-[#ABCFD1]">
+            <i data-lucide="sparkles" class="w-6 h-6 text-[#17BCBC]"></i> AI ประเมินสุขภาพ
+          </button>
+          <button onclick="switchTab('rehab')" id="nav-rehab" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-lg font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent hover:border-[#ABCFD1]">
+            <i data-lucide="smile" class="w-6 h-6 text-[#64C5D7]"></i> ฝึกกายภาพฟื้นฟู
+          </button>
+          <button onclick="switchTab('family_dash')" id="nav-family_dash" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-lg font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent hover:border-[#ABCFD1]">
+            <i data-lucide="heart" class="w-6 h-6 text-[#84BAC9]"></i> มุมผู้ดูแล & ครอบครัว
+          </button>
+          <button onclick="switchTab('emergency')" id="nav-emergency" class="nav-btn w-full flex items-center justify-between px-5 py-4 rounded-2xl text-lg font-bold text-slate-700 hover:bg-rose-50 hover:text-rose-600 transition-all border border-transparent">
+            <span class="flex items-center gap-4"><i data-lucide="bell-ring" class="w-6 h-6 text-rose-500"></i> แจ้งเตือนด่วน</span>
+            <span id="alert-dot" class="hidden w-3.5 h-3.5 rounded-full bg-rose-600 animate-ping"></span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- User Profile Card -->
+      <div class="p-4 bg-[#CEEAE5]/40 rounded-2xl border border-[#ABCFD1] flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-full bg-[#4E98B8] text-white flex items-center justify-center font-bold text-xl shadow-sm">สม</div>
+        <div class="overflow-hidden">
+          <p class="text-base font-extrabold text-slate-900 truncate">คุณสมชาย ใจดี</p>
+          <p class="text-xs text-[#174355] font-semibold">ผู้ป่วยในการดูแล • 67 ปี</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN DISPLAY AREA -->
+    <main class="flex-1 min-w-0">
+
+      <!-- PATIENT DASHBOARD -->
+      <section id="page-patient_dash" class="page-content space-y-6">
+        <!-- Header Banner -->
+        <div class="bg-white p-6 md:p-8 rounded-3xl border-2 border-[#ABCFD1]/60 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#CEEAE5] text-[#174355] text-sm font-bold mb-3">
+              💧 สุขภาพวันนี้ของคุณตา/คุณยาย
+            </span>
+            <h1 class="text-3xl md:text-4xl font-black text-slate-900">สวัสดีครับ คุณสมชาย 💙</h1>
+            <p class="text-slate-600 text-base mt-1 font-medium">วันนี้ร่างกายผ่อนคลาย สดชื่น พร้อมฟื้นฟูกันครับ</p>
+          </div>
+          <div class="bg-[#BDDAE6]/30 border border-[#84BAC9] px-5 py-3 rounded-2xl text-right shrink-0">
+            <span class="text-xs font-bold text-[#174355] uppercase block">วันที่ปัจจุบัน</span>
+            <p class="text-lg font-extrabold text-slate-900">19 สิงหาคม 2569</p>
+          </div>
+        </div>
+
+        <!-- Health Vitals Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <div class="bg-white p-6 rounded-3xl border-2 border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-600 mb-2">
+              <span class="text-sm font-bold">อัตราการเต้นหัวใจ</span>
+              <div class="p-2.5 bg-[#CEEAE5]/60 rounded-xl text-[#17BCBC]"><i data-lucide="heart" class="w-6 h-6"></i></div>
+            </div>
+            <p class="text-4xl font-black text-slate-900"><span class="val-hr">76</span> <span class="text-sm font-bold text-slate-500">ครั้ง/นาที</span></p>
+            <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold mt-3">✓ ปกติดี</span>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border-2 border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-600 mb-2">
+              <span class="text-sm font-bold">ความดันโลหิต</span>
+              <div class="p-2.5 bg-[#BDDAE6]/60 rounded-xl text-[#4E98B8]"><i data-lucide="activity" class="w-6 h-6"></i></div>
+            </div>
+            <p class="text-3xl font-black text-slate-900"><span class="val-bp">128 / 82</span> <span class="text-xs font-bold text-slate-500">mmHg</span></p>
+            <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold mt-3 val-bp-status">✓ ปกติดี</span>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border-2 border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-slate-600 mb-2">
+              <span class="text-sm font-bold">ออกซิเจนในเลือด</span>
+              <div class="p-2.5 bg-[#CEEAE5]/60 rounded-xl text-[#64C5D7]"><i data-lucide="wind" class="w-6 h-6"></i></div>
+            </div>
+            <p class="text-4xl font-black text-slate-900"><span class="val-spo2">98%</span></p>
+            <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold mt-3">✓ ปอดทำงานดี</span>
+          </div>
+
+          <div id="card-risk-status" class="p-6 rounded-3xl border-2 bg-[#BDDAE6]/30 border-[#84BAC9] shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-extrabold text-slate-700">ประเมินความเสี่ยง AI</span>
+              <div class="p-2.5 bg-white rounded-xl shadow-xs text-[#17BCBC]"><i data-lucide="sparkles" class="w-6 h-6"></i></div>
+            </div>
+            <p id="val-risk-label" class="text-3xl font-black text-[#4E98B8]">เสี่ยงต่ำ</p>
+            <p id="val-risk-score" class="text-xs font-extrabold mt-2 text-slate-700">คะแนน: 18/100</p>
+          </div>
+
+        </div>
+
+        <!-- AI Advice Box (ใช้สีเข้ม #4E98B8 เพื่ออ่านข้อความขาวได้คมชัด) -->
+        <div class="bg-[#4E98B8] text-white p-7 md:p-8 rounded-3xl shadow-md space-y-4">
+          <div class="flex items-center gap-2 text-[#CEEAE5] text-base font-bold">
+            <i data-lucide="smile" class="w-6 h-6"></i> คำแนะนำประจำวันจาก AI
+          </div>
+          <p class="text-white text-xl leading-relaxed font-bold">
+            "วันนี้กำลังแขนขวาของคุณตาดีขึ้นมากครับ! อย่าลืมฝึกบริหารมือกำ-แบ 10 นาทีตามตาราง เพื่อช่วยผ่อนคลายกล้ามเนื้อนะครับ"
+          </p>
+        </div>
+
+        <!-- Check-list สำหรับผู้สูงอายุ -->
+        <div class="bg-white p-6 md:p-8 rounded-3xl border-2 border-slate-200 shadow-sm space-y-5">
+          <div class="flex items-center justify-between border-b pb-4">
+            <h2 class="font-extrabold text-slate-900 text-xl">สิ่งที่ต้องทำวันนี้</h2>
+            <span class="text-sm font-bold text-[#174355] bg-[#CEEAE5] px-3.5 py-1 rounded-full">กดที่แถบเพื่อติ๊กทำแล้ว</span>
+          </div>
+          <div id="task-list" class="space-y-3">
+            <!-- Dynamic Tasks -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    let tasks = [
+      { id: 1, title: '💊 รับประทานยาเช้าหลังอาหาร', done: true },
+      { id: 2, title: '🩺 วัดความดันโลหิตรอบเช้า', done: true },
+      { id: 3, title: '🖐 ฝึกกายภาพบริหารมือกำ-แบ (10 นาที)', done: false },
+      { id: 4, title: '🥛 ดื่มน้ำสะอาด 1 แก้วเต็ม', done: false },
+    ];
+
+    lucide.createIcons();
+
+    function renderTasks() {
+      const container = document.getElementById('task-list');
+      if (!container) return;
+      container.innerHTML = tasks.map(t => `
+        <div onclick="toggleTask(${t.id})" class="flex items-center justify-between p-5 rounded-2xl cursor-pointer transition-all border-2 ${t.done ? 'bg-slate-100 border-slate-300 text-slate-400' : 'bg-[#BDDAE6]/20 border-[#ABCFD1] text-slate-900 hover:border-[#4E98B8]'}">
+          <div class="flex items-center gap-4">
+            <span class="w-8 h-8 rounded-xl border-2 flex items-center justify-center font-black text-lg ${t.done ? 'bg-[#17BCBC] border-[#17BCBC] text-white' : 'border-slate-400 bg-white'}">${t.done ? '✓' : ''}</span>
+            <span class="${t.done ? 'line-through font-normal' : 'font-bold text-xl'}">${t.title}</span>
+          </div>
+          <span class="text-sm px-4 py-1.5 rounded-full font-bold ${t.done ? 'bg-slate-200 text-slate-600' : 'bg-[#4E98B8] text-white'}">${t.done ? 'เรียบร้อย' : 'ยังไม่ได้ทำ'}</span>
+        </div>
+      `).join('');
+    }
+
+    function toggleTask(id) {
+      tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+      renderTasks();
+    }
+
+    renderTasks();
+  </script>
+</body>
+</html>
