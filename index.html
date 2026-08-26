@@ -3,21 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>StrokeGuard AI — Responsive Mobile Care</title>
+  <title>StrokeGuard AI — Care & Health</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { 
       font-family: 'Prompt', sans-serif; 
-      background-color: #F4F8F9; 
-      font-size: 16px;
+      background-color: #F4F8F9;
+      font-size: 16px; 
       -webkit-tap-highlight-color: transparent;
     }
     @media (min-width: 640px) {
       body { font-size: 18px; }
     }
-    /* Safe Area สำหรับมือถือขอบโค้ง/มี Notch (iPhone & Modern Android) */
     .pb-safe {
       padding-bottom: env(safe-area-inset-bottom, 1rem);
     }
@@ -25,35 +24,40 @@
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col antialiased selection:bg-[#CEEAE5]">
 
-  <!-- 1. DEMO CONTROLLER BAR (ปรับให้พับแถบได้ดีบนมือถือ) -->
+  <!-- 1. DEMO CONTROLLER BAR -->
   <header class="bg-slate-900 text-slate-100 px-3 py-2.5 sticky top-0 z-50 shadow-md">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm">
-      <div class="flex items-center gap-2 font-bold w-full sm:w-auto justify-between sm:justify-start">
-        <div class="flex items-center gap-2">
-          <span class="flex h-2.5 w-2.5 rounded-full bg-[#17BCBC] animate-ping"></span>
-          <span class="text-[#BDDAE6] text-xs sm:text-sm">โหมดทดสอบ (Demo Switcher):</span>
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-2 text-xs sm:text-sm">
+      
+      <!-- สลับสัญญาณชีพ -->
+      <div class="flex items-center justify-between w-full lg:w-auto gap-2">
+        <div class="flex items-center gap-1.5 bg-slate-800 p-1 rounded-xl border border-slate-700">
+          <span class="text-[#BDDAE6] text-xs font-bold px-1 hidden sm:inline">สัญญาณชีพ:</span>
+          <button onclick="setDemoMode('normal')" id="btn-demo-normal" class="px-2.5 py-1 rounded-lg transition-all font-bold bg-[#4E98B8] text-white">🌊 ปกติ</button>
+          <button onclick="setDemoMode('warning')" id="btn-demo-warning" class="px-2.5 py-1 rounded-lg transition-all font-medium text-slate-300">🍑 เฝ้าระวัง</button>
+          <button onclick="setDemoMode('critical')" id="btn-demo-critical" class="px-2.5 py-1 rounded-lg transition-all font-medium text-slate-300">🚨 ฉุกเฉิน</button>
         </div>
-        <!-- Mobile Quick Alert -->
-        <button onclick="switchTab('emergency')" class="sm:hidden px-2.5 py-1 bg-rose-600 text-white rounded-lg font-bold text-xs">
-          🚨 ฉุกเฉิน
-        </button>
+
+        <!-- สลับพิกัดตำแหน่ง (ฟีเจอร์ใหม่) -->
+        <div class="flex items-center gap-1.5 bg-slate-800 p-1 rounded-xl border border-slate-700">
+          <span class="text-[#BDDAE6] text-xs font-bold px-1 hidden sm:inline">ตำแหน่ง:</span>
+          <button onclick="toggleLocation('home')" id="btn-loc-home" class="px-2.5 py-1 rounded-lg transition-all font-bold bg-emerald-600 text-white">🏠 อยู่บ้าน</button>
+          <button onclick="toggleLocation('away')" id="btn-loc-away" class="px-2.5 py-1 rounded-lg transition-all font-medium text-slate-300">🚗 ออกนอกบ้าน</button>
+        </div>
       </div>
 
-      <div class="flex items-center gap-1.5 bg-slate-800 p-1 rounded-xl border border-slate-700 w-full sm:w-auto justify-center">
-        <button onclick="setDemoMode('normal')" id="btn-demo-normal" class="flex-1 sm:flex-initial px-3 py-1 rounded-lg transition-all font-bold bg-[#4E98B8] text-white text-xs sm:text-sm">
-          🌊 ปกติ
-        </button>
-        <button onclick="setDemoMode('warning')" id="btn-demo-warning" class="flex-1 sm:flex-initial px-3 py-1 rounded-lg transition-all font-medium text-slate-300 text-xs sm:text-sm">
-          🍑 เฝ้าระวัง
-        </button>
-        <button onclick="setDemoMode('critical')" id="btn-demo-critical" class="flex-1 sm:flex-initial px-3 py-1 rounded-lg transition-all font-medium text-slate-300 text-xs sm:text-sm">
-          🚨 ฉุกเฉิน
-        </button>
+      <!-- เมนูด่วน -->
+      <div class="hidden lg:flex items-center gap-2 text-slate-300 text-xs font-medium">
+        <span>เมนูด่วน:</span>
+        <button onclick="switchTab('patient_dash')" class="hover:text-[#64C5D7] underline">หน้าหลัก</button> |
+        <button onclick="switchTab('ai_analysis')" class="hover:text-[#64C5D7] underline">วิเคราะห์ AI</button> |
+        <button onclick="switchTab('rehab')" class="hover:text-[#64C5D7] underline">กายภาพ</button> |
+        <button onclick="switchTab('family_dash')" class="hover:text-[#64C5D7] underline">ผู้ดูแล</button> |
+        <button onclick="switchTab('emergency')" class="hover:text-[#64C5D7] underline">ฉุกเฉิน</button>
       </div>
     </div>
   </header>
 
-  <!-- 2. MOBILE TOP BAR (แสดงเฉพาะบนมือถือ) -->
+  <!-- 2. MOBILE TOP BAR -->
   <div class="md:hidden bg-white border-b border-[#ABCFD1]/60 px-4 py-3 flex items-center justify-between shadow-xs">
     <div onclick="switchTab('welcome')" class="flex items-center gap-2.5 cursor-pointer">
       <div class="w-10 h-10 rounded-xl bg-[#4E98B8] flex items-center justify-center text-white shadow-sm">
@@ -61,54 +65,55 @@
       </div>
       <div>
         <h1 class="font-extrabold text-lg text-slate-900 leading-tight">StrokeGuard</h1>
-        <p class="text-[10px] text-[#174355] font-semibold bg-[#CEEAE5] px-1.5 py-0.2 rounded-md inline-block">AI Care Assistant</p>
+        <span class="text-[10px] bg-[#CEEAE5] text-[#174355] px-1.5 py-0.2 rounded-md font-bold">AI Care Assistant</span>
       </div>
     </div>
-    <div class="flex items-center gap-2">
-      <div class="w-9 h-9 rounded-full bg-[#4E98B8] text-white flex items-center justify-center font-bold text-sm shadow-sm">สม</div>
-    </div>
+    <div class="w-9 h-9 rounded-full bg-[#4E98B8] text-white flex items-center justify-center font-bold text-sm shadow-sm">สม</div>
   </div>
 
   <!-- 3. MAIN CONTAINER -->
   <div class="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto p-3 sm:p-6 gap-6 pb-28 md:pb-6">
     
-    <!-- DESKTOP SIDEBAR (แสดงเฉพาะจอใหญ่ mdขึ้นไป) -->
-    <aside id="main-sidebar" class="hidden md:flex flex-col w-80 bg-white rounded-3xl p-6 border-2 border-[#ABCFD1]/60 shadow-lg shrink-0 justify-between">
+    <!-- DESKTOP SIDEBAR -->
+    <aside id="main-sidebar" class="hidden md:flex flex-col w-72 bg-white rounded-3xl p-6 border-2 border-[#ABCFD1]/60 shadow-lg shrink-0 justify-between">
       <div class="space-y-6">
         <div onclick="switchTab('welcome')" class="flex items-center gap-3.5 cursor-pointer px-1">
-          <div class="w-14 h-14 rounded-2xl bg-[#4E98B8] flex items-center justify-center text-white shadow-md shadow-[#84BAC9]/30">
-            <i data-lucide="heart-pulse" class="w-8 h-8"></i>
+          <div class="w-12 h-12 rounded-2xl bg-[#4E98B8] flex items-center justify-center text-white shadow-md shadow-[#84BAC9]/30">
+            <i data-lucide="heart-pulse" class="w-7 h-7"></i>
           </div>
           <div>
-            <h1 class="font-extrabold text-2xl text-slate-900 leading-tight">StrokeGuard</h1>
-            <span class="text-xs bg-[#CEEAE5] text-[#174355] px-2.5 py-0.5 rounded-full font-bold">AI Care Assistant</span>
+            <h1 class="font-extrabold text-xl text-slate-900 leading-tight">StrokeGuard</h1>
+            <span class="text-xs bg-[#CEEAE5] text-[#174355] px-2 py-0.5 rounded-full font-bold">AI Care Assistant</span>
           </div>
         </div>
 
         <nav class="space-y-2">
-          <button onclick="switchTab('patient_dash')" id="nav-patient_dash" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-lg font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent hover:border-[#ABCFD1]">
-            <i data-lucide="home" class="w-6 h-6 text-[#4E98B8]"></i> หน้าหลักผู้ป่วย
+          <button onclick="switchTab('patient_dash')" id="nav-patient_dash" class="nav-btn w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-base font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent">
+            <i data-lucide="home" class="w-5 h-5 text-[#4E98B8]"></i> หน้าหลักผู้ป่วย
           </button>
-          <button onclick="switchTab('ai_analysis')" id="nav-ai_analysis" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-lg font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent hover:border-[#ABCFD1]">
-            <i data-lucide="sparkles" class="w-6 h-6 text-[#17BCBC]"></i> AI ประเมินสุขภาพ
+          <button onclick="switchTab('ai_analysis')" id="nav-ai_analysis" class="nav-btn w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-base font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent">
+            <i data-lucide="sparkles" class="w-5 h-5 text-[#17BCBC]"></i> AI ประเมินสุขภาพ
           </button>
-          <button onclick="switchTab('rehab')" id="nav-rehab" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-lg font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent hover:border-[#ABCFD1]">
-            <i data-lucide="smile" class="w-6 h-6 text-[#64C5D7]"></i> ฝึกกายภาพฟื้นฟู
+          <button onclick="switchTab('rehab')" id="nav-rehab" class="nav-btn w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-base font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent">
+            <i data-lucide="smile" class="w-5 h-5 text-[#64C5D7]"></i> ฝึกกายภาพฟื้นฟู
           </button>
-          <button onclick="switchTab('family_dash')" id="nav-family_dash" class="nav-btn w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-lg font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent hover:border-[#ABCFD1]">
-            <i data-lucide="heart" class="w-6 h-6 text-[#84BAC9]"></i> มุมผู้ดูแล & ครอบครัว
+          <button onclick="switchTab('family_dash')" id="nav-family_dash" class="nav-btn w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-base font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent">
+            <i data-lucide="heart" class="w-5 h-5 text-[#84BAC9]"></i> มุมผู้ดูแล & ครอบครัว
           </button>
-          <button onclick="switchTab('emergency')" id="nav-emergency" class="nav-btn w-full flex items-center justify-between px-5 py-4 rounded-2xl text-lg font-bold text-slate-700 hover:bg-rose-50 hover:text-rose-600 transition-all border border-transparent">
-            <span class="flex items-center gap-4"><i data-lucide="bell-ring" class="w-6 h-6 text-rose-500"></i> แจ้งเตือนด่วน</span>
-            <span id="alert-dot" class="hidden w-3.5 h-3.5 rounded-full bg-rose-600 animate-ping"></span>
+          <button onclick="switchTab('emergency')" id="nav-emergency" class="nav-btn w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-base font-bold text-slate-700 hover:bg-rose-50 hover:text-rose-600 transition-all border border-transparent">
+            <span class="flex items-center gap-3.5"><i data-lucide="bell-ring" class="w-5 h-5 text-rose-500"></i> แจ้งเตือนด่วน</span>
+            <span id="alert-dot" class="hidden w-3 h-3 rounded-full bg-rose-600 animate-ping"></span>
+          </button>
+          <button onclick="switchTab('report')" id="nav-report" class="nav-btn w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-base font-bold text-slate-700 hover:bg-[#BDDAE6]/30 hover:text-[#4E98B8] transition-all border border-transparent">
+            <i data-lucide="file-text" class="w-5 h-5 text-[#4E98B8]"></i> สรุปรายงานหมอ
           </button>
         </nav>
       </div>
 
-      <div class="p-4 bg-[#CEEAE5]/40 rounded-2xl border border-[#ABCFD1] flex items-center gap-3.5">
-        <div class="w-12 h-12 rounded-full bg-[#4E98B8] text-white flex items-center justify-center font-bold text-xl shadow-sm">สม</div>
+      <div class="p-4 bg-[#CEEAE5]/40 rounded-2xl border border-[#ABCFD1] flex items-center gap-3">
+        <div class="w-11 h-11 rounded-full bg-[#4E98B8] text-white flex items-center justify-center font-bold text-lg shadow-sm">สม</div>
         <div class="overflow-hidden">
-          <p class="text-base font-extrabold text-slate-900 truncate">คุณสมชาย ใจดี</p>
+          <p class="text-sm font-extrabold text-slate-900 truncate">คุณสมชาย ใจดี</p>
           <p class="text-xs text-[#174355] font-semibold">ผู้ป่วยในการดูแล • 67 ปี</p>
         </div>
       </div>
@@ -117,9 +122,63 @@
     <!-- MAIN DISPLAY AREA -->
     <main class="flex-1 min-w-0">
 
-      <!-- PATIENT DASHBOARD -->
-      <section id="page-patient_dash" class="page-content space-y-4 sm:space-y-6">
-        <!-- Banner -->
+      <!-- PAGE 01 — WELCOME -->
+      <section id="page-welcome" class="page-content bg-white rounded-3xl p-6 sm:p-12 border-2 border-[#ABCFD1]/60 shadow-xl text-center flex flex-col items-center justify-center min-h-[75vh] relative overflow-hidden">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#CEEAE5] text-[#174355] text-xs sm:text-sm font-bold mb-6">
+          <i data-lucide="flower2" class="w-4 h-4 text-[#17BCBC]"></i> เพื่อนคู่คิด ฟื้นฟูสุขภาพผู้ป่วย Stroke
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-black text-slate-900 leading-snug mb-4 max-w-2xl">
+          อุ่นใจทุกวัน <span class="text-[#4E98B8]">ฟื้นตัวได้ไว</span> ด้วย AI คอยดูแล
+        </h1>
+        <p class="text-sm sm:text-lg text-slate-600 mb-8 max-w-xl leading-relaxed font-medium">
+          แอปพลิเคชันช่วยติดตามสุขภาพ อัตราการเต้นหัวใจ ความดัน ตำแหน่งในบ้าน และแนะนำการฟื้นฟูร่างกายอย่างใกล้ชิด
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <button onclick="switchTab('role_select')" class="px-8 py-4 bg-[#4E98B8] hover:bg-[#3b7994] text-white rounded-2xl font-bold text-base sm:text-lg shadow-md transition-all flex items-center justify-center gap-2">
+            เริ่มต้นใช้งานง่ายๆ <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </button>
+          <button onclick="switchTab('patient_dash')" class="px-8 py-4 bg-[#BDDAE6]/30 hover:bg-[#BDDAE6]/50 text-slate-800 rounded-2xl font-bold text-base sm:text-lg border border-[#84BAC9] transition-all">
+            ทดลองใช้งาน Demo
+          </button>
+        </div>
+      </section>
+
+      <!-- PAGE 02 — ROLE SELECTION -->
+      <section id="page-role_select" class="page-content hidden max-w-4xl mx-auto py-4 sm:py-8 space-y-6">
+        <div class="text-center">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">ยินดีต้อนรับครับ 👋</h2>
+          <p class="text-slate-600 mt-1 text-sm sm:text-base">กรุณาเลือกรูปแบบการใช้งานที่ต้องการ</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div class="bg-white rounded-3xl p-6 border-2 border-[#ABCFD1]/60 shadow-md flex flex-col justify-between space-y-4">
+            <div>
+              <div class="w-14 h-14 rounded-2xl text-[#4E98B8] bg-[#BDDAE6]/40 flex items-center justify-center mb-4"><i data-lucide="user" class="w-7 h-7"></i></div>
+              <h3 class="text-lg font-bold text-slate-900 mb-1">คุณตา / คุณยาย (ผู้ป่วย)</h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">หน้าจอขนาดใหญ่ อ่านง่าย กดสะดวก มี AI คอยแนะนำ</p>
+            </div>
+            <button onclick="switchTab('patient_dash')" class="w-full py-3.5 bg-[#4E98B8] hover:bg-[#3b7994] text-white font-bold rounded-2xl shadow-sm transition-all">เข้าสู่หน้าผู้ป่วย</button>
+          </div>
+          <div class="bg-white rounded-3xl p-6 border-2 border-[#ABCFD1]/60 shadow-md flex flex-col justify-between space-y-4">
+            <div>
+              <div class="w-14 h-14 rounded-2xl text-[#17BCBC] bg-[#CEEAE5] flex items-center justify-center mb-4"><i data-lucide="heart-handshake" class="w-7 h-7"></i></div>
+              <h3 class="text-lg font-bold text-slate-900 mb-1">ญาติ / ผู้ดูแล</h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">ติดตามสุขภาพ ตรวจสอบตำแหน่งการอยู่อาศัยในบ้าน</p>
+            </div>
+            <button onclick="switchTab('family_dash')" class="w-full py-3.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-2xl transition-all">เข้าสู่หน้าผู้ดูแล</button>
+          </div>
+          <div class="bg-white rounded-3xl p-6 border-2 border-[#ABCFD1]/60 shadow-md flex flex-col justify-between space-y-4">
+            <div>
+              <div class="w-14 h-14 rounded-2xl text-[#174355] bg-[#BDDAE6] flex items-center justify-center mb-4"><i data-lucide="stethoscope" class="w-7 h-7"></i></div>
+              <h3 class="text-lg font-bold text-slate-900 mb-1">คุณหมอ / เจ้าหน้าที่</h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">เรียกดูประวัติสุขภาพ สถานะความปลอดภัย และรายงานผล</p>
+            </div>
+            <button onclick="switchTab('report')" class="w-full py-3.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-2xl transition-all">เข้าสู่หน้าเจ้าหน้าที่</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE 03 — PATIENT DASHBOARD -->
+      <section id="page-patient_dash" class="page-content hidden space-y-4 sm:space-y-6">
         <div class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#ABCFD1]/60 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#CEEAE5] text-[#174355] text-xs sm:text-sm font-bold mb-2">
@@ -134,9 +193,8 @@
           </div>
         </div>
 
-        <!-- Health Vitals Cards (จัดเป็น Grid 2 คอลัมน์บนมือถือ 4 คอลัมน์บนจอใหญ่) -->
+        <!-- Vitals -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          
           <div class="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm flex flex-col justify-between">
             <div class="flex items-center justify-between text-slate-600 mb-2">
               <span class="text-xs sm:text-sm font-bold">อัตราหัวใจ</span>
@@ -172,86 +230,276 @@
             <p id="val-risk-label" class="text-2xl sm:text-3xl font-black text-[#4E98B8]">เสี่ยงต่ำ</p>
             <p id="val-risk-score" class="text-[10px] sm:text-xs font-extrabold mt-1 text-slate-700">คะแนน: 18/100</p>
           </div>
-
         </div>
 
-        <!-- AI Advice Box -->
-        <div class="bg-[#4E98B8] text-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-md space-y-3">
-          <div class="flex items-center gap-2 text-[#CEEAE5] text-xs sm:text-base font-bold">
-            <i data-lucide="smile" class="w-5 h-5 sm:w-6 sm:h-6"></i> คำแนะนำประจำวันจาก AI
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div class="bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h2 class="font-extrabold text-slate-900 text-base sm:text-lg">ความคืบหน้ากายภาพ</h2>
+              <span class="text-[#4E98B8] font-black text-2xl">75%</span>
+            </div>
+            <div class="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
+              <div class="bg-[#4E98B8] h-full rounded-full transition-all" style="width: 75%"></div>
+            </div>
+            <p class="text-xs text-emerald-700 font-bold flex items-center gap-1">
+              <i data-lucide="trending-up" class="w-4 h-4"></i> ดีขึ้นกว่าสัปดาห์ที่แล้ว 12%
+            </p>
           </div>
-          <p class="text-white text-base sm:text-xl leading-relaxed font-bold">
-            "วันนี้กำลังแขนขวาของคุณตาดีขึ้นมากครับ! อย่าลืมฝึกบริหารมือกำ-แบ 10 นาทีตามตาราง เพื่อช่วยผ่อนคลายกล้ามเนื้อนะครับ"
-          </p>
+
+          <div class="bg-[#4E98B8] text-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-md lg:col-span-2 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center gap-2 text-[#CEEAE5] text-xs sm:text-base font-bold mb-2">
+                <i data-lucide="smile" class="w-5 h-5"></i> คำแนะนำประจำวันจาก AI
+              </div>
+              <p class="text-white text-base sm:text-xl leading-relaxed font-bold">
+                "วันนี้กำลังแขนขวาของคุณตาดีขึ้นมากครับ! อย่าลืมฝึกบริหารมือกำ-แบ 10 นาทีตามตาราง เพื่อช่วยผ่อนคลายกล้ามเนื้อนะครับ"
+              </p>
+            </div>
+            <div class="flex justify-end">
+              <button onclick="switchTab('ai_analysis')" class="px-5 py-2 bg-white text-[#4E98B8] hover:bg-[#CEEAE5] font-extrabold rounded-xl text-xs sm:text-sm transition-all shadow-sm flex items-center gap-1">
+                ดูผลประเมินละเอียด <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
         </div>
 
-        <!-- Check-list สำหรับผู้สูงอายุ -->
         <div class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm space-y-4">
           <div class="flex items-center justify-between border-b pb-3">
             <h2 class="font-extrabold text-slate-900 text-base sm:text-xl">สิ่งที่ต้องทำวันนี้</h2>
             <span class="text-xs font-bold text-[#174355] bg-[#CEEAE5] px-2.5 py-1 rounded-full">ติ๊กเพื่อเช็ค</span>
           </div>
-          <div id="task-list" class="space-y-2.5">
-            <!-- Dynamic Tasks -->
+          <div id="task-list" class="space-y-2.5"></div>
+        </div>
+      </section>
+
+      <!-- PAGE 04 — AI HEALTH ANALYSIS -->
+      <section id="page-ai_analysis" class="page-content hidden space-y-4 sm:space-y-6">
+        <div class="bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-[#ABCFD1]/60 shadow-sm">
+          <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900">วิเคราะห์สุขภาพโดย AI</h1>
+          <p class="text-slate-600 text-xs sm:text-sm mt-1">ประเมินปัจจัยความเสี่ยงหลอดเลือดสมองและแนวโน้มการฟื้นตัว</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div class="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm flex flex-col items-center justify-center text-center">
+            <span class="text-xs font-bold text-slate-500 uppercase mb-3">คะแนนความเสี่ยงรวม</span>
+            <div class="w-36 h-36 rounded-full border-8 border-[#4E98B8] flex flex-col items-center justify-center bg-[#BDDAE6]/20">
+              <span id="ai-circle-score" class="text-4xl font-black text-slate-900">18</span>
+              <span id="ai-circle-label" class="text-xs font-bold uppercase text-[#4E98B8] mt-1">เสี่ยงต่ำ</span>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm md:col-span-2 space-y-3">
+            <h2 class="font-extrabold text-slate-900 text-base sm:text-lg mb-3">ปัจจัยที่นำมาวิเคราะห์</h2>
+            <div class="p-3.5 bg-slate-50 rounded-xl flex justify-between items-center text-xs sm:text-sm font-bold">
+              <span class="text-slate-700">ความดันโลหิต (Blood Pressure)</span> 
+              <span id="factor-bp" class="text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">✓ อยู่ในเกณฑ์ดี</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-xl flex justify-between items-center text-xs sm:text-sm font-bold">
+              <span class="text-slate-700">อัตราการเต้นหัวใจ (Heart Rate)</span> 
+              <span class="text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">✓ อยู่ในเกณฑ์ดี</span>
+            </div>
+            <div class="p-3.5 bg-slate-50 rounded-xl flex justify-between items-center text-xs sm:text-sm font-bold">
+              <span class="text-slate-700">พัฒนาการกายภาพ (Recovery)</span> 
+              <span class="text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">✓ ก้าวหน้าสม่ำเสมอ</span>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- PAGE: EMERGENCY (ตัวอย่างหน้าฉุกเฉิน) -->
-      <section id="page-emergency" class="page-content hidden space-y-4">
-        <div class="bg-rose-600 text-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl space-y-4 text-center">
-          <i data-lucide="alert-triangle" class="w-16 h-16 mx-auto animate-bounce text-amber-300"></i>
-          <h1 class="text-2xl sm:text-3xl font-black">ระบบแจ้งเตือนฉุกเฉิน</h1>
-          <p class="text-sm sm:text-base text-rose-100">หากคุณตาพบอาการผิดปกติ เช่น หน้าเบี้ยว แขนขาอ่อนแรง พูดไม่ชัด ให้กดปุ่มด้านล่างทันที</p>
-          <button onclick="alert('ระบบกำลังส่งสัญญาณแจ้งเตือนไปยังญาติและสายด่วน 1669')" class="w-full py-4 bg-white text-rose-600 font-black text-xl rounded-2xl shadow-lg hover:bg-rose-50 active:scale-95 transition-all">
-            📞 โทรขอความช่วยเหลือด่วน (1669)
+      <!-- PAGE 05 — REHABILITATION -->
+      <section id="page-rehab" class="page-content hidden space-y-4 sm:space-y-6">
+        <div class="bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-[#ABCFD1]/60 shadow-sm">
+          <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900">โปรแกรมกายภาพฟื้นฟูประจำวัน 🧘‍♀️</h1>
+          <p class="text-slate-600 text-xs sm:text-sm mt-1">ค่อยๆ ฝึกทำตามทีละขั้นตอน ไม่ต้องรีบร้อนนะครับ</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div class="bg-white p-6 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#BDDAE6] text-[#174355] flex items-center justify-center font-extrabold text-lg">1</div>
+              <div>
+                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">🖐 บริหารมือกำ-แบ</h3>
+                <p class="text-xs text-slate-500">ช่วยให้กล้ามเนื้อนิ้วมือไม่เกร็ง</p>
+              </div>
+            </div>
+            <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden"><div class="bg-[#4E98B8] h-full" style="width:80%"></div></div>
+            <button onclick="openRehabModal()" class="w-full py-3.5 bg-[#4E98B8] hover:bg-[#3b7994] text-white rounded-xl sm:rounded-2xl font-bold transition-all shadow-sm">เริ่มฝึกท่านี้</button>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-[#CEEAE5] text-[#174355] flex items-center justify-center font-extrabold text-lg">2</div>
+              <div>
+                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">🚶 ฝึกยืนเกาะราวทรงตัว</h3>
+                <p class="text-xs text-slate-500">สร้างความแข็งแรงให้ขาและข้อเท้า</p>
+              </div>
+            </div>
+            <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden"><div class="bg-[#17BCBC] h-full" style="width:65%"></div></div>
+            <button onclick="openRehabModal()" class="w-full py-3.5 bg-[#4E98B8] hover:bg-[#3b7994] text-white rounded-xl sm:rounded-2xl font-bold transition-all shadow-sm">เริ่มฝึกท่านี้</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE 06 — FAMILY DASHBOARD (มีระบบเช็คตำแหน่งผู้สูงอายุ) -->
+      <section id="page-family_dash" class="page-content hidden space-y-4 sm:space-y-6">
+        <div class="bg-white p-5 sm:p-7 rounded-2xl sm:rounded-3xl border-2 border-[#ABCFD1]/60 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900">มุมติดตามของคุณพ่อ 💙</h1>
+            <p class="text-slate-600 text-xs sm:text-sm mt-1">ผู้ป่วย: คุณสมชาย ใจดี (อายุ 67 ปี)</p>
+          </div>
+          <span id="family-status-badge" class="px-4 py-2 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">🟢 สุขภาพวันนี้: ปกติดี</span>
+        </div>
+
+        <!-- FEATURE: IN-HOME LOCATION TRACKER CARD -->
+        <div class="bg-white p-5 sm:p-7 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b pb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="p-2.5 rounded-xl bg-[#BDDAE6]/40 text-[#4E98B8]">
+                <i data-lucide="map-pin" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h2 class="font-extrabold text-slate-900 text-base sm:text-lg">ระบบติดตามการอยู่อาศัยในบ้าน (In-Home Tracker)</h2>
+                <p class="text-xs text-slate-500">ตรวจสอบพิกัด Geofence แบบเรียลไทม์</p>
+              </div>
+            </div>
+            <span id="loc-badge-status" class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800">
+              🏠 อยู่ในบ้าน
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-1">
+              <span class="text-xs font-bold text-slate-500 block">ตำแหน่งปัจจุบัน</span>
+              <p id="loc-text-name" class="font-extrabold text-slate-800 text-base">บ้านพักอาศัย (ห้องนั่งเล่น)</p>
+              <p id="loc-text-sub" class="text-xs text-emerald-600 font-bold">✓ อยู่ในรัศมีปลอดภัย (Safe Zone)</p>
+            </div>
+
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-1">
+              <span class="text-xs font-bold text-slate-500 block">อัปเดตล่าสุด</span>
+              <p class="font-extrabold text-slate-800 text-base">10 นาทีที่แล้ว</p>
+              <p class="text-xs text-slate-500 font-medium">ผ่านสัญญาณ WiFi Home-Router</p>
+            </div>
+
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 flex flex-col justify-between">
+              <span class="text-xs font-bold text-slate-500 block">แผนที่พิกัด</span>
+              <button onclick="alert('กำลังเปิดแผนที่ตำแหน่งพิกัด GPS...')" class="mt-2 w-full py-2 bg-[#4E98B8] hover:bg-[#3b7994] text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all">
+                <i data-lucide="map" class="w-4 h-4"></i> เปิดแผนที่ Google Maps
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE 07 — EMERGENCY ALERT -->
+      <section id="page-emergency" class="page-content hidden bg-rose-600 text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-2xl space-y-5 border-4 border-rose-300">
+        <div class="flex items-center justify-between border-b border-white/20 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center"><i data-lucide="alert-triangle" class="w-7 h-7 text-white"></i></div>
+            <div>
+              <h1 class="text-xl sm:text-2xl font-black">⚠️ ตรวจพบสัญญาณต้องเฝ้าระวัง</h1>
+              <p class="text-xs text-rose-100">ระบบ AI ตรวจพบความผิดปกติของสัญญาณชีพ</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 bg-white text-rose-600 font-black rounded-full text-xs">ALERT</span>
+        </div>
+        
+        <div class="bg-white/10 p-5 rounded-xl backdrop-blur-sm border border-white/20">
+          <p class="text-2xl sm:text-3xl font-black">ความดันโลหิตสูง: <span class="val-bp text-amber-200">178 / 105</span> mmHg</p>
+          <p class="text-xs sm:text-sm text-rose-100 mt-2">* ควรให้นั่งพัก สงบสติอารมณ์ และวัดซ้ำในอีก 5 นาที หากยังมีอาการเวียนศีรษะให้ติดต่อสายด่วนทันที</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button onclick="alert('กำลังทำการโทรออกสายด่วน 1669...')" class="flex-1 py-4 bg-white text-rose-600 font-black text-lg rounded-xl shadow-md">
+            📞 โทรขอความช่วยเหลือ (1669)
           </button>
+          <button onclick="setDemoMode('normal'); switchTab('patient_dash');" class="px-6 py-4 bg-rose-900/40 text-white font-bold rounded-xl">
+            ปิดแจ้งเตือน
+          </button>
+        </div>
+      </section>
+
+      <!-- PAGE 08 — HEALTH REPORT (เจ้าหน้าที่/หมอ) -->
+      <section id="page-report" class="page-content hidden space-y-4 sm:space-y-6">
+        <div class="bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-[#ABCFD1]/60 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900">รายงานสุขภาพสำหรับเจ้าหน้าที่ & คุณหมอ</h1>
+            <p class="text-xs text-slate-500 mt-1">สรุปแนวโน้มความดัน สัญญาณชีพ และพิกัดการอยู่อาศัย</p>
+          </div>
+          <button onclick="alert('ทำการดาวน์โหลดไฟล์ PDF เรียบร้อยแล้ว!')" class="w-full sm:w-auto px-5 py-3 bg-[#4E98B8] text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-sm">
+            <i data-lucide="download" class="w-4 h-4"></i> โหลด PDF
+          </button>
+        </div>
+
+        <!-- สรุปสถานะการอยู่อาศัยสำหรับหมอ -->
+        <div class="bg-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="p-3 bg-[#CEEAE5] text-[#174355] rounded-2xl">
+              <i data-lucide="home" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-slate-800 text-base">สถานะการพักอาศัยที่บ้าน</h3>
+              <p id="staff-loc-detail" class="text-xs text-slate-500">ผู้ป่วยพักอาศัยอยู่ในบ้านพักปกติ (ไม่พบการออกนอกพื้นที่เสี่ยง)</p>
+            </div>
+          </div>
+          <span id="staff-loc-badge" class="px-3 py-1.5 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full">อยู่ในบ้าน</span>
         </div>
       </section>
 
     </main>
   </div>
 
-  <!-- 4. MOBILE BOTTOM NAVIGATION (แถบเมนูด้านล่างสุดสำหรับสมาร์ตโฟน) -->
+  <!-- 4. MOBILE BOTTOM NAVIGATION -->
   <nav class="md:hidden fixed bottom-0 inset-x-0 bg-white border-t-2 border-[#ABCFD1]/60 shadow-2xl z-40 pb-safe">
     <div class="grid grid-cols-5 h-16">
-      
-      <button onclick="switchTab('patient_dash')" id="m-nav-patient_dash" class="m-nav-btn flex flex-col items-center justify-center text-slate-500 hover:text-[#4E98B8] transition-all">
+      <button onclick="switchTab('patient_dash')" id="m-nav-patient_dash" class="m-nav-btn flex flex-col items-center justify-center text-slate-500">
         <i data-lucide="home" class="w-5 h-5 mb-0.5"></i>
         <span class="text-[10px] font-bold">หน้าหลัก</span>
       </button>
-
-      <button onclick="switchTab('ai_analysis')" id="m-nav-ai_analysis" class="m-nav-btn flex flex-col items-center justify-center text-slate-500 hover:text-[#17BCBC] transition-all">
+      <button onclick="switchTab('ai_analysis')" id="m-nav-ai_analysis" class="m-nav-btn flex flex-col items-center justify-center text-slate-500">
         <i data-lucide="sparkles" class="w-5 h-5 mb-0.5"></i>
         <span class="text-[10px] font-bold">AI ประเมิน</span>
       </button>
-
-      <button onclick="switchTab('rehab')" id="m-nav-rehab" class="m-nav-btn flex flex-col items-center justify-center text-slate-500 hover:text-[#64C5D7] transition-all">
+      <button onclick="switchTab('rehab')" id="m-nav-rehab" class="m-nav-btn flex flex-col items-center justify-center text-slate-500">
         <i data-lucide="smile" class="w-5 h-5 mb-0.5"></i>
         <span class="text-[10px] font-bold">ฝึกกายภาพ</span>
       </button>
-
-      <button onclick="switchTab('family_dash')" id="m-nav-family_dash" class="m-nav-btn flex flex-col items-center justify-center text-slate-500 hover:text-[#84BAC9] transition-all">
+      <button onclick="switchTab('family_dash')" id="m-nav-family_dash" class="m-nav-btn flex flex-col items-center justify-center text-slate-500">
         <i data-lucide="heart" class="w-5 h-5 mb-0.5"></i>
         <span class="text-[10px] font-bold">ผู้ดูแล</span>
       </button>
-
-      <button onclick="switchTab('emergency')" id="m-nav-emergency" class="m-nav-btn flex flex-col items-center justify-center text-rose-500 hover:text-rose-700 transition-all">
+      <button onclick="switchTab('emergency')" id="m-nav-emergency" class="m-nav-btn flex flex-col items-center justify-center text-rose-500">
         <i data-lucide="bell-ring" class="w-5 h-5 mb-0.5"></i>
         <span class="text-[10px] font-extrabold">ฉุกเฉิน</span>
       </button>
-
     </div>
   </nav>
 
-  <!-- JAVASCRIPT -->
+  <!-- REHAB SIMULATION MODAL -->
+  <div id="rehab-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 border-2 border-[#ABCFD1]">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-extrabold text-slate-900 text-lg flex items-center gap-2">💧 กิจกรรม: บริหารมือกำ-แบ</h3>
+        <button onclick="closeRehabModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold">✕</button>
+      </div>
+      <div id="modal-step-content" class="text-center space-y-4">
+        <div id="modal-step-num" class="w-16 h-16 bg-[#CEEAE5] text-[#174355] rounded-full flex items-center justify-center mx-auto text-xl font-black shadow-inner">1 / 4</div>
+        <p id="modal-step-text" class="font-extrabold text-lg text-slate-900">1. ยื่นมือออกไปข้างหน้าช้าๆ</p>
+        <button onclick="nextRehabStep()" class="w-full py-3.5 bg-[#4E98B8] hover:bg-[#3b7994] text-white font-bold rounded-2xl shadow-sm transition-all">ทำเสร็จแล้ว (ไปขั้นถัดไป)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    let currentTab = 'patient_dash';
+    let currentTab = 'welcome';
+    let demoMode = 'normal';
+    let isAtHome = true;
+    let rehabStep = 1;
     let tasks = [
       { id: 1, title: '💊 รับประทานยาเช้าหลังอาหาร', done: true },
       { id: 2, title: '🩺 วัดความดันโลหิตรอบเช้า', done: true },
       { id: 3, title: '🖐 ฝึกกายภาพบริเวณมือ (10 นาที)', done: false },
-      { id: 4, title: '🥛 ดื่มน้ำสะอาด 1 แก้วเต็ม', done: false },
+      { id: 4, title: '🥛 ดื่มน้ำสะอาดให้ครบ 1 แก้วเต็ม', done: false },
     ];
 
     lucide.createIcons();
@@ -262,30 +510,73 @@
       const targetPage = document.getElementById(`page-${tabId}`);
       if (targetPage) targetPage.classList.remove('hidden');
 
-      // Highlight Desktop Nav
+      // Desktop Nav Highlight
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-[#BDDAE6]/30', 'text-[#4E98B8]'));
       const activeNav = document.getElementById(`nav-${tabId}`);
       if (activeNav) activeNav.classList.add('bg-[#BDDAE6]/30', 'text-[#4E98B8]');
 
-      // Highlight Mobile Bottom Nav
-      document.querySelectorAll('.m-nav-btn').forEach(btn => btn.classList.remove('text-[#4E98B8]', 'font-extrabold', 'scale-105'));
+      // Mobile Bottom Nav Highlight
+      document.querySelectorAll('.m-nav-btn').forEach(btn => btn.classList.remove('text-[#4E98B8]', 'font-extrabold'));
       const activeMNav = document.getElementById(`m-nav-${tabId}`);
-      if (activeMNav && tabId !== 'emergency') {
-        activeMNav.classList.add('text-[#4E98B8]', 'font-extrabold');
+      if (activeMNav && tabId !== 'emergency') activeMNav.classList.add('text-[#4E98B8]', 'font-extrabold');
+
+      const sidebar = document.getElementById('main-sidebar');
+      if (sidebar) {
+        if (tabId === 'welcome' || tabId === 'role_select') {
+          sidebar.classList.add('hidden');
+        } else {
+          sidebar.classList.remove('hidden');
+        }
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Toggle Location (ฟีเจอร์ติดตามผู้สูงอายุ)
+    function toggleLocation(loc) {
+      isAtHome = loc === 'home';
+      
+      const btnHome = document.getElementById('btn-loc-home');
+      const btnAway = document.getElementById('btn-loc-away');
+
+      if (isAtHome) {
+        btnHome.className = "px-2.5 py-1 rounded-lg transition-all font-bold bg-emerald-600 text-white";
+        btnAway.className = "px-2.5 py-1 rounded-lg transition-all font-medium text-slate-300";
+
+        document.getElementById('loc-badge-status').className = "px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800";
+        document.getElementById('loc-badge-status').textContent = "🏠 อยู่ในบ้าน";
+        document.getElementById('loc-text-name').textContent = "บ้านพักอาศัย (ห้องนั่งเล่น)";
+        document.getElementById('loc-text-sub').className = "text-xs text-emerald-600 font-bold";
+        document.getElementById('loc-text-sub').textContent = "✓ อยู่ในรัศมีปลอดภัย (Safe Zone)";
+
+        document.getElementById('staff-loc-badge').className = "px-3 py-1.5 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full";
+        document.getElementById('staff-loc-badge').textContent = "อยู่ในบ้าน";
+        document.getElementById('staff-loc-detail').textContent = "ผู้ป่วยพักอาศัยอยู่ในบ้านพักปกติ (ไม่พบการออกนอกพื้นที่เสี่ยง)";
+      } else {
+        btnHome.className = "px-2.5 py-1 rounded-lg transition-all font-medium text-slate-300";
+        btnAway.className = "px-2.5 py-1 rounded-lg transition-all font-bold bg-amber-500 text-white animate-pulse";
+
+        document.getElementById('loc-badge-status').className = "px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-800";
+        document.getElementById('loc-badge-status').textContent = "🚗 ออกนอกบ้าน";
+        document.getElementById('loc-text-name').textContent = "ถนนใหญ่ (ห่างจากบ้าน 1.2 กม.)";
+        document.getElementById('loc-text-sub').className = "text-xs text-amber-600 font-bold";
+        document.getElementById('loc-text-sub').textContent = "⚠️ ออกนอกเขตรัศมีปลอดภัย";
+
+        document.getElementById('staff-loc-badge').className = "px-3 py-1.5 bg-amber-100 text-amber-800 text-xs font-bold rounded-full";
+        document.getElementById('staff-loc-badge').textContent = "อยู่นอกบ้าน";
+        document.getElementById('staff-loc-detail').textContent = "⚠️ ตรวจพบการเคลื่อนที่ออกนอกเขตรัศมีบ้านพัก (1.2 กม.)";
+      }
     }
 
     function renderTasks() {
       const container = document.getElementById('task-list');
       if (!container) return;
       container.innerHTML = tasks.map(t => `
-        <div onclick="toggleTask(${t.id})" class="flex items-center justify-between p-3.5 sm:p-5 rounded-xl sm:rounded-2xl cursor-pointer transition-all border-2 ${t.done ? 'bg-slate-100 border-slate-300 text-slate-400' : 'bg-[#BDDAE6]/20 border-[#ABCFD1] text-slate-900 hover:border-[#4E98B8]'}">
+        <div onclick="toggleTask(${t.id})" class="flex items-center justify-between p-3.5 sm:p-4 rounded-xl sm:rounded-2xl cursor-pointer transition-all border-2 ${t.done ? 'bg-slate-100 border-slate-300 text-slate-400' : 'bg-[#BDDAE6]/20 border-[#ABCFD1] text-slate-900 hover:border-[#4E98B8]'}">
           <div class="flex items-center gap-3">
-            <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl border-2 flex items-center justify-center font-black text-base sm:text-lg shrink-0 ${t.done ? 'bg-[#17BCBC] border-[#17BCBC] text-white' : 'border-slate-400 bg-white'}">${t.done ? '✓' : ''}</span>
-            <span class="${t.done ? 'line-through font-normal text-xs sm:text-base' : 'font-bold text-sm sm:text-xl'}">${t.title}</span>
+            <span class="w-7 h-7 rounded-lg border-2 flex items-center justify-center font-black text-sm shrink-0 ${t.done ? 'bg-[#17BCBC] border-[#17BCBC] text-white' : 'border-slate-400 bg-white'}">${t.done ? '✓' : ''}</span>
+            <span class="${t.done ? 'line-through font-normal text-xs sm:text-base' : 'font-bold text-sm sm:text-base'}">${t.title}</span>
           </div>
-          <span class="text-[10px] sm:text-sm px-2.5 sm:px-4 py-1 rounded-full font-bold shrink-0 ${t.done ? 'bg-slate-200 text-slate-600' : 'bg-[#4E98B8] text-white'}">${t.done ? 'ทำแล้ว' : 'ยังไม่ทำ'}</span>
+          <span class="text-[10px] sm:text-xs px-2.5 py-1 rounded-full font-bold shrink-0 ${t.done ? 'bg-slate-200 text-slate-600' : 'bg-[#4E98B8] text-white'}">${t.done ? 'เรียบร้อย' : 'ยังไม่ทำ'}</span>
         </div>
       `).join('');
     }
@@ -296,9 +587,15 @@
     }
 
     function setDemoMode(mode) {
-      let bp = '128/82', hr = '76', label = 'เสี่ยงต่ำ', score = '18';
-      if (mode === 'warning') { bp = '142/92'; hr = '88'; label = 'ปานกลาง'; score = '54'; }
-      if (mode === 'critical') { bp = '178/105'; hr = '104'; label = 'เสี่ยงสูง'; score = '88'; }
+      demoMode = mode;
+      
+      document.getElementById('btn-demo-normal').className = mode === 'normal' ? 'px-2.5 py-1 rounded-lg font-bold bg-[#4E98B8] text-white' : 'px-2.5 py-1 text-slate-300';
+      document.getElementById('btn-demo-warning').className = mode === 'warning' ? 'px-2.5 py-1 rounded-lg font-bold bg-amber-500 text-white' : 'px-2.5 py-1 text-slate-300';
+      document.getElementById('btn-demo-critical').className = mode === 'critical' ? 'px-2.5 py-1 rounded-lg font-bold bg-rose-600 text-white animate-pulse' : 'px-2.5 py-1 text-slate-300';
+
+      let bp = '128 / 82', hr = '76', label = 'เสี่ยงต่ำ', score = '18', factorBp = '✓ อยู่ในเกณฑ์ดี';
+      if (mode === 'warning') { bp = '142 / 92'; hr = '88'; label = 'ปานกลาง'; score = '54'; factorBp = '⚠️ เฝ้าระวังเล็กน้อย'; }
+      if (mode === 'critical') { bp = '178 / 105'; hr = '104'; label = 'เสี่ยงสูง'; score = '88'; factorBp = '🔴 ต้องระวังพิเศษ'; }
 
       document.querySelectorAll('.val-bp').forEach(el => el.textContent = bp);
       document.querySelectorAll('.val-hr').forEach(el => el.textContent = hr);
@@ -309,13 +606,60 @@
       const riskScore = document.getElementById('val-risk-score');
       if (riskScore) riskScore.textContent = `คะแนน: ${score}/100`;
 
-      if (mode === 'critical') {
+      const circleScore = document.getElementById('ai-circle-score');
+      if (circleScore) circleScore.textContent = score;
+
+      const circleLabel = document.getElementById('ai-circle-label');
+      if (circleLabel) circleLabel.textContent = label;
+
+      const factorBpEl = document.getElementById('factor-bp');
+      if (factorBpEl) factorBpEl.textContent = factorBp;
+
+      const alertDot = document.getElementById('alert-dot');
+      if (alertDot) alertDot.className = mode === 'critical' ? 'w-3 h-3 rounded-full bg-rose-600 animate-ping' : 'hidden';
+
+      if (mode === 'critical' && currentTab !== 'emergency') {
         switchTab('emergency');
       }
     }
 
+    function openRehabModal() {
+      rehabStep = 1;
+      updateModalStep();
+      document.getElementById('rehab-modal').classList.remove('hidden');
+    }
+
+    function closeRehabModal() {
+      document.getElementById('rehab-modal').classList.add('hidden');
+    }
+
+    function nextRehabStep() {
+      if (rehabStep < 4) {
+        rehabStep++;
+        updateModalStep();
+      } else {
+        document.getElementById('modal-step-content').innerHTML = `
+          <div class="text-[#17BCBC] text-4xl font-black mb-2">🎉</div>
+          <h4 class="text-lg font-bold text-slate-900">เก่งมากครับ ทำสำเร็จแล้ว!</h4>
+          <p class="text-xs text-slate-500 mb-4">+10 คะแนนฟื้นฟูร่างกายวันนี้</p>
+          <button onclick="closeRehabModal()" class="w-full py-3 bg-[#4E98B8] text-white font-bold rounded-xl shadow-sm">ตกลง</button>
+        `;
+      }
+    }
+
+    function updateModalStep() {
+      const steps = [
+        '1. ยื่นมือออกไปข้างหน้าช้าๆ',
+        '2. กำมือแน่นๆ ค้างไว้ 3 วินาที',
+        '3. คลายมือออก แบมือนิ้วเหยียดตรง',
+        '4. ทำซ้ำ 10 ครั้ง ช้าๆ ไม่ต้องรีบร้อน'
+      ];
+      document.getElementById('modal-step-num').textContent = `${rehabStep} / 4`;
+      document.getElementById('modal-step-text').textContent = steps[rehabStep - 1];
+    }
+
     renderTasks();
-    switchTab('patient_dash');
+    switchTab('welcome');
   </script>
 </body>
 </html>
