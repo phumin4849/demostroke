@@ -37,7 +37,7 @@
           <button onclick="setDemoMode('critical')" id="btn-demo-critical" class="px-2.5 py-1 rounded-lg transition-all font-medium text-slate-300">🚨 ฉุกเฉิน</button>
         </div>
 
-        <!-- สลับพิกัดตำแหน่ง (ฟีเจอร์ใหม่) -->
+        <!-- สลับพิกัดตำแหน่ง -->
         <div class="flex items-center gap-1.5 bg-slate-800 p-1 rounded-xl border border-slate-700">
           <span class="text-[#BDDAE6] text-xs font-bold px-1 hidden sm:inline">ตำแหน่ง:</span>
           <button onclick="toggleLocation('home')" id="btn-loc-home" class="px-2.5 py-1 rounded-lg transition-all font-bold bg-emerald-600 text-white">🏠 อยู่บ้าน</button>
@@ -177,9 +177,9 @@
         </div>
       </section>
 
-      <!-- PAGE 03 — PATIENT DASHBOARD -->
+      <!-- PAGE 03 — PATIENT DASHBOARD (มีปุ่มบันทึกค่าสุขภาพใหม่) -->
       <section id="page-patient_dash" class="page-content hidden space-y-4 sm:space-y-6">
-        <div class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#ABCFD1]/60 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border-2 border-[#ABCFD1]/60 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#CEEAE5] text-[#174355] text-xs sm:text-sm font-bold mb-2">
               💧 สุขภาพวันนี้ของคุณตา/คุณยาย
@@ -187,13 +187,20 @@
             <h1 class="text-2xl sm:text-4xl font-black text-slate-900 leading-tight">สวัสดีครับ คุณสมชาย 💙</h1>
             <p class="text-slate-600 text-sm sm:text-base mt-1 font-medium">วันนี้ร่างกายผ่อนคลาย สดชื่น พร้อมฟื้นฟูกันครับ</p>
           </div>
-          <div class="bg-[#BDDAE6]/30 border border-[#84BAC9] px-4 py-2 sm:px-5 sm:py-3 rounded-xl sm:rounded-2xl text-left sm:text-right w-full sm:w-auto shrink-0 flex sm:block items-center justify-between">
-            <span class="text-xs font-bold text-[#174355] uppercase">วันที่ปัจจุบัน:</span>
-            <p class="text-sm sm:text-lg font-extrabold text-slate-900">19 สิงหาคม 2569</p>
+          
+          <div class="flex flex-col sm:flex-row gap-2.5 w-full md:w-auto shrink-0">
+            <!-- FEATURE: ปุ่มเพิ่มค่าสุขภาพสำหรับผู้ป่วย -->
+            <button onclick="openVitalsModal()" class="px-5 py-3.5 bg-[#17BCBC] hover:bg-[#139a9a] text-white rounded-2xl font-extrabold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2">
+              <i data-lucide="plus-circle" class="w-5 h-5"></i> บันทึกค่าสุขภาพใหม่
+            </button>
+            <div class="bg-[#BDDAE6]/30 border border-[#84BAC9] px-4 py-2 sm:px-5 sm:py-3 rounded-2xl text-left md:text-right flex md:block items-center justify-between">
+              <span class="text-xs font-bold text-[#174355] uppercase">วันที่ปัจจุบัน:</span>
+              <p class="text-sm sm:text-lg font-extrabold text-slate-900">19 สิงหาคม 2569</p>
+            </div>
           </div>
         </div>
 
-        <!-- Vitals -->
+        <!-- Vitals Cards (อัปเดตแบบ Dynamic) -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <div class="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm flex flex-col justify-between">
             <div class="flex items-center justify-between text-slate-600 mb-2">
@@ -201,7 +208,7 @@
               <div class="p-2 bg-[#CEEAE5]/60 rounded-xl text-[#17BCBC]"><i data-lucide="heart" class="w-5 h-5 sm:w-6 sm:h-6"></i></div>
             </div>
             <p class="text-2xl sm:text-4xl font-black text-slate-900"><span class="val-hr">76</span> <span class="text-xs sm:text-sm font-bold text-slate-500">ครั้ง/นาที</span></p>
-            <span class="inline-block px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-[10px] sm:text-xs font-extrabold mt-2 w-fit">✓ ปกติดี</span>
+            <span id="badge-hr-status" class="inline-block px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-[10px] sm:text-xs font-extrabold mt-2 w-fit">✓ ปกติดี</span>
           </div>
 
           <div class="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm flex flex-col justify-between">
@@ -210,7 +217,7 @@
               <div class="p-2 bg-[#BDDAE6]/60 rounded-xl text-[#4E98B8]"><i data-lucide="activity" class="w-5 h-5 sm:w-6 sm:h-6"></i></div>
             </div>
             <p class="text-xl sm:text-3xl font-black text-slate-900"><span class="val-bp">128/82</span> <span class="text-[10px] sm:text-xs font-bold text-slate-500">mmHg</span></p>
-            <span class="inline-block px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-[10px] sm:text-xs font-extrabold mt-2 w-fit">✓ ปกติดี</span>
+            <span id="badge-bp-status" class="inline-block px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-[10px] sm:text-xs font-extrabold mt-2 w-fit">✓ ปกติดี</span>
           </div>
 
           <div class="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm flex flex-col justify-between">
@@ -218,8 +225,8 @@
               <span class="text-xs sm:text-sm font-bold">ออกซิเจน</span>
               <div class="p-2 bg-[#CEEAE5]/60 rounded-xl text-[#64C5D7]"><i data-lucide="wind" class="w-5 h-5 sm:w-6 sm:h-6"></i></div>
             </div>
-            <p class="text-2xl sm:text-4xl font-black text-slate-900"><span class="val-spo2">98%</span></p>
-            <span class="inline-block px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-[10px] sm:text-xs font-extrabold mt-2 w-fit">✓ ปอดดี</span>
+            <p class="text-2xl sm:text-4xl font-black text-slate-900"><span class="val-spo2">98</span><span class="text-sm font-extrabold">%</span></p>
+            <span id="badge-spo2-status" class="inline-block px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-[10px] sm:text-xs font-extrabold mt-2 w-fit">✓ ปอดดี</span>
           </div>
 
           <div id="card-risk-status" class="p-4 sm:p-6 rounded-2xl sm:rounded-3xl border-2 bg-[#BDDAE6]/30 border-[#84BAC9] shadow-sm flex flex-col justify-between">
@@ -296,7 +303,7 @@
             </div>
             <div class="p-3.5 bg-slate-50 rounded-xl flex justify-between items-center text-xs sm:text-sm font-bold">
               <span class="text-slate-700">อัตราการเต้นหัวใจ (Heart Rate)</span> 
-              <span class="text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">✓ อยู่ในเกณฑ์ดี</span>
+              <span id="factor-hr" class="text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">✓ อยู่ในเกณฑ์ดี</span>
             </div>
             <div class="p-3.5 bg-slate-50 rounded-xl flex justify-between items-center text-xs sm:text-sm font-bold">
               <span class="text-slate-700">พัฒนาการกายภาพ (Recovery)</span> 
@@ -340,7 +347,7 @@
         </div>
       </section>
 
-      <!-- PAGE 06 — FAMILY DASHBOARD (มีระบบเช็คตำแหน่งผู้สูงอายุ) -->
+      <!-- PAGE 06 — FAMILY DASHBOARD -->
       <section id="page-family_dash" class="page-content hidden space-y-4 sm:space-y-6">
         <div class="bg-white p-5 sm:p-7 rounded-2xl sm:rounded-3xl border-2 border-[#ABCFD1]/60 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
@@ -350,7 +357,7 @@
           <span id="family-status-badge" class="px-4 py-2 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">🟢 สุขภาพวันนี้: ปกติดี</span>
         </div>
 
-        <!-- FEATURE: IN-HOME LOCATION TRACKER CARD -->
+        <!-- IN-HOME LOCATION TRACKER CARD -->
         <div class="bg-white p-5 sm:p-7 rounded-2xl sm:rounded-3xl border-2 border-slate-200 shadow-sm space-y-4">
           <div class="flex items-center justify-between border-b pb-3">
             <div class="flex items-center gap-2.5">
@@ -404,7 +411,7 @@
         </div>
         
         <div class="bg-white/10 p-5 rounded-xl backdrop-blur-sm border border-white/20">
-          <p class="text-2xl sm:text-3xl font-black">ความดันโลหิตสูง: <span class="val-bp text-amber-200">178 / 105</span> mmHg</p>
+          <p class="text-2xl sm:text-3xl font-black">ความดันโลหิตสูง: <span class="val-bp text-amber-200">178/105</span> mmHg</p>
           <p class="text-xs sm:text-sm text-rose-100 mt-2">* ควรให้นั่งพัก สงบสติอารมณ์ และวัดซ้ำในอีก 5 นาที หากยังมีอาการเวียนศีรษะให้ติดต่อสายด่วนทันที</p>
         </div>
 
@@ -474,7 +481,7 @@
     </div>
   </nav>
 
-  <!-- REHAB SIMULATION MODAL -->
+  <!-- MODAL 1: REHAB SIMULATION -->
   <div id="rehab-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 border-2 border-[#ABCFD1]">
       <div class="flex items-center justify-between border-b pb-3">
@@ -486,6 +493,60 @@
         <p id="modal-step-text" class="font-extrabold text-lg text-slate-900">1. ยื่นมือออกไปข้างหน้าช้าๆ</p>
         <button onclick="nextRehabStep()" class="w-full py-3.5 bg-[#4E98B8] hover:bg-[#3b7994] text-white font-bold rounded-2xl shadow-sm transition-all">ทำเสร็จแล้ว (ไปขั้นถัดไป)</button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ADD VITALS (ฟีเจอร์เพิ่มค่าสุขภาพของผู้ป่วย) -->
+  <div id="vitals-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-5 border-2 border-[#ABCFD1] relative">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-extrabold text-slate-900 text-xl flex items-center gap-2">
+          🩺 บันทึกค่าสุขภาพใหม่
+        </h3>
+        <button onclick="closeVitalsModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold hover:bg-slate-200">✕</button>
+      </div>
+
+      <form onsubmit="saveCustomVitals(event)" class="space-y-4">
+        <!-- ความดันตัวบน / ตัวล่าง -->
+        <div class="space-y-1.5">
+          <label class="block text-xs sm:text-sm font-extrabold text-slate-700">ความดันโลหิต (mmHg)</label>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <span class="text-[10px] text-slate-500 font-bold">ตัวบน (Systolic)</span>
+              <input type="number" id="input-sys" min="60" max="240" required placeholder="เช่น 120" value="128"
+                class="w-full mt-1 p-3 rounded-xl border-2 border-slate-200 focus:border-[#4E98B8] focus:outline-none font-bold text-lg text-slate-800 bg-slate-50">
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-500 font-bold">ตัวล่าง (Diastolic)</span>
+              <input type="number" id="input-dia" min="40" max="150" required placeholder="เช่น 80" value="82"
+                class="w-full mt-1 p-3 rounded-xl border-2 border-slate-200 focus:border-[#4E98B8] focus:outline-none font-bold text-lg text-slate-800 bg-slate-50">
+            </div>
+          </div>
+        </div>
+
+        <!-- อัตราหัวใจ -->
+        <div class="space-y-1">
+          <label for="input-hr" class="block text-xs sm:text-sm font-extrabold text-slate-700">อัตราการเต้นของหัวใจ (ครั้ง/นาที)</label>
+          <input type="number" id="input-hr" min="40" max="200" required placeholder="เช่น 75" value="76"
+            class="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-[#4E98B8] focus:outline-none font-bold text-lg text-slate-800 bg-slate-50">
+        </div>
+
+        <!-- ออกซิเจนในเลือด -->
+        <div class="space-y-1">
+          <label for="input-spo2" class="block text-xs sm:text-sm font-extrabold text-slate-700">ออกซิเจนในเลือด SpO2 (%)</label>
+          <input type="number" id="input-spo2" min="70" max="100" required placeholder="เช่น 98" value="98"
+            class="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-[#4E98B8] focus:outline-none font-bold text-lg text-slate-800 bg-slate-50">
+        </div>
+
+        <div class="pt-2 flex gap-3">
+          <button type="button" onclick="closeVitalsModal()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all">
+            ยกเลิก
+          </button>
+          <button type="submit" class="flex-1 py-3 bg-[#4E98B8] hover:bg-[#3b7994] text-white font-extrabold rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5">
+            <i data-lucide="check" class="w-5 h-5"></i> บันทึกข้อมูล
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -529,6 +590,84 @@
         }
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Modal Control Functions for Vitals
+    function openVitalsModal() {
+      document.getElementById('vitals-modal').classList.remove('hidden');
+    }
+
+    function closeVitalsModal() {
+      document.getElementById('vitals-modal').classList.add('hidden');
+    }
+
+    // Save Vitals Function (อัปเดตค่าความดัน หัวใจ ออกซิเจน จากฟอร์ม)
+    function saveCustomVitals(event) {
+      event.preventDefault();
+      
+      const sys = parseInt(document.getElementById('input-sys').value) || 120;
+      const dia = parseInt(document.getElementById('input-dia').value) || 80;
+      const hr = parseInt(document.getElementById('input-hr').value) || 75;
+      const spo2 = parseInt(document.getElementById('input-spo2').value) || 98;
+
+      const bpString = `${sys}/${dia}`;
+
+      // อัปเดตแสดงผลในหน้าต่างต่างๆ
+      document.querySelectorAll('.val-bp').forEach(el => el.textContent = bpString);
+      document.querySelectorAll('.val-hr').forEach(el => el.textContent = hr);
+      document.querySelectorAll('.val-spo2').forEach(el => el.textContent = spo2);
+
+      // ประเมินสถานะความเสี่ยงเบื้องต้นอัตโนมัติ
+      let riskLabel = 'เสี่ยงต่ำ';
+      let riskScore = 18;
+      let bpStatusText = '✓ ปกติดี';
+      let hrStatusText = '✓ ปกติดี';
+      let factorBpText = '✓ อยู่ในเกณฑ์ดี';
+      let factorHrText = '✓ อยู่ในเกณฑ์ดี';
+
+      if (sys >= 160 || dia >= 100 || hr > 100 || spo2 < 92) {
+        riskLabel = 'เสี่ยงสูง';
+        riskScore = 88;
+        bpStatusText = '⚠️ สูงมาก';
+        hrStatusText = hr > 100 ? '⚠️ เร็วไป' : '✓ ปกติดี';
+        factorBpText = '🔴 ต้องระวังพิเศษ';
+        factorHrText = hr > 100 ? '⚠️ หัวใจเต้นเร็ว' : '✓ ปกติดี';
+        switchTab('emergency');
+      } else if (sys >= 135 || dia >= 88 || hr > 90) {
+        riskLabel = 'ปานกลาง';
+        riskScore = 54;
+        bpStatusText = '⚡ ค่อนข้างสูง';
+        hrStatusText = '✓ ปกติดี';
+        factorBpText = '⚠️ เฝ้าระวังเล็กน้อย';
+      }
+
+      // อัปเดต Badge และสถานะ AI
+      const bpBadge = document.getElementById('badge-bp-status');
+      if (bpBadge) bpBadge.textContent = bpStatusText;
+
+      const hrBadge = document.getElementById('badge-hr-status');
+      if (hrBadge) hrBadge.textContent = hrStatusText;
+
+      const riskLabelEl = document.getElementById('val-risk-label');
+      if (riskLabelEl) riskLabelEl.textContent = riskLabel;
+
+      const riskScoreEl = document.getElementById('val-risk-score');
+      if (riskScoreEl) riskScoreEl.textContent = `คะแนน: ${riskScore}/100`;
+
+      const circleScore = document.getElementById('ai-circle-score');
+      if (circleScore) circleScore.textContent = riskScore;
+
+      const circleLabel = document.getElementById('ai-circle-label');
+      if (circleLabel) circleLabel.textContent = riskLabel;
+
+      const factorBpEl = document.getElementById('factor-bp');
+      if (factorBpEl) factorBpEl.textContent = factorBpText;
+
+      const factorHrEl = document.getElementById('factor-hr');
+      if (factorHrEl) factorHrEl.textContent = factorHrText;
+
+      closeVitalsModal();
+      alert('บันทึกค่าสุขภาพใหม่เรียบร้อยแล้วครับ! AI ได้ประเมินผลอัปเดตข้อมูลให้ทันที');
     }
 
     // Toggle Location (ฟีเจอร์ติดตามผู้สูงอายุ)
@@ -593,9 +732,9 @@
       document.getElementById('btn-demo-warning').className = mode === 'warning' ? 'px-2.5 py-1 rounded-lg font-bold bg-amber-500 text-white' : 'px-2.5 py-1 text-slate-300';
       document.getElementById('btn-demo-critical').className = mode === 'critical' ? 'px-2.5 py-1 rounded-lg font-bold bg-rose-600 text-white animate-pulse' : 'px-2.5 py-1 text-slate-300';
 
-      let bp = '128 / 82', hr = '76', label = 'เสี่ยงต่ำ', score = '18', factorBp = '✓ อยู่ในเกณฑ์ดี';
-      if (mode === 'warning') { bp = '142 / 92'; hr = '88'; label = 'ปานกลาง'; score = '54'; factorBp = '⚠️ เฝ้าระวังเล็กน้อย'; }
-      if (mode === 'critical') { bp = '178 / 105'; hr = '104'; label = 'เสี่ยงสูง'; score = '88'; factorBp = '🔴 ต้องระวังพิเศษ'; }
+      let bp = '128/82', hr = '76', label = 'เสี่ยงต่ำ', score = '18', factorBp = '✓ อยู่ในเกณฑ์ดี';
+      if (mode === 'warning') { bp = '142/92'; hr = '88'; label = 'ปานกลาง'; score = '54'; factorBp = '⚠️ เฝ้าระวังเล็กน้อย'; }
+      if (mode === 'critical') { bp = '178/105'; hr = '104'; label = 'เสี่ยงสูง'; score = '88'; factorBp = '🔴 ต้องระวังพิเศษ'; }
 
       document.querySelectorAll('.val-bp').forEach(el => el.textContent = bp);
       document.querySelectorAll('.val-hr').forEach(el => el.textContent = hr);
