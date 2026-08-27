@@ -1,0 +1,16 @@
+body { 
+  font-family: 'Prompt', sans-serif; 
+  background-color: #F4F8F9;
+  font-size: 16px; 
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 640px) {
+  body { 
+    font-size: 18px; 
+  }
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
